@@ -1,41 +1,46 @@
-import { Box, Typography, useTheme } from "@mui/material";
-import { DataGrid } from "@mui/x-data-grid";
+import { Box } from "@mui/material";
+import { DataGrid, GridToolbar } from "@mui/x-data-grid";
 import { tokens } from "../../theme";
-import { mockDataTeam } from "../../data/mockData";
-import AdminPanelSettingsOutlinedIcon from "@mui/icons-material/AdminPanelSettingsOutlined";
-import LockOpenOutlinedIcon from "@mui/icons-material/LockOpenOutlined";
-import SecurityOutlinedIcon from "@mui/icons-material/SecurityOutlined";
+import { mockDataContacts } from "../../data/mockData";
 import Header from "../../components/Header";
+import { useTheme } from "@mui/material";
 import { useState, useEffect } from "react";
 
-const Team = () => {
+
+const Answers = () => {
     const theme = useTheme();
     const colors = tokens(theme.palette.mode);
-    const [results, setResults] = useState([]);
+    const [rows, setRows] = useState([]);
     const [rowCount, setRowCount] = useState(0);
     const [loading, setLoading] = useState(false);
+    const [questionId, setQuestionId] = useState(625470953);
     const [paginationModel, setPaginationModel] = useState({
-        page: 0,
+        page: 1,
         pageSize: 100,
     });
 
 
 
     useEffect(() => {
-        const fetchData = (page, pageSize) => {
-            console.log("this is a test:", page);
-            fetch(`http://127.0.0.1:8080/questions?page=${page}&pageSize=${pageSize}`)
+        const fetchData = (questionId) => {
+            setLoading(true);
+            const { page, pageSize } = paginationModel;
+            fetch(`http://127.0.0.1:8080/api/answers?question_id=${questionId}&page=${page}&pageSize=${pageSize}`)
                 .then(response => response.json())
-                .then(data => {
-                    const results = data.results.filter(user => {
+                .then(response => {
+                    console.log("current results1", response.data[0]);
+
+                    const results = response.data.filter(answer => {
                         return (
-                            user.title &&
-                            user.frequency
+                            answer.content &&
+                            answer.emotion !== "" &&
+                            answer.emotion !== undefined
                         );
                     }
                     );
-                    setResults(results);
-                    setRowCount(data.totalCount); // Assume the API returns a total count
+                    console.log("current results", results[0]);
+                    setRows(results);
+                    setRowCount(response.data.totalCount); // Assume the API returns a total count
                     setLoading(false);
                 }).catch(error => {
                     console.error('There was an error!', error);
@@ -44,21 +49,23 @@ const Team = () => {
                 })
         };
 
-        fetchData(paginationModel.page, paginationModel.pageSize);
-    }, [paginationModel.page, paginationModel.pageSize]);
+        fetchData(questionId);
+    }, [paginationModel]);
+
 
 
     const columns = [
         { field: "id", headerName: "ID" },
-        { field: "title", headerName: "Title", width: 600 },
-        { field: "frequency", headerName: "Frequency" }
+        { field: "content", headerName: "Content", width: 600 },
+        { field: "emotion", headerName: "Emotion" },
     ];
-
-
 
     return (
         <Box m="20px">
-            <Header title="TEAM" subtitle="Managing the Team Members" />
+            <Header
+                title="Answers"
+                subtitle="List of Answers for Product Analysis"
+            />
             <Box
                 m="40px 0 0 0"
                 height="75vh"
@@ -86,23 +93,29 @@ const Team = () => {
                     "& .MuiCheckbox-root": {
                         color: `${colors.greenAccent[200]} !important`,
                     },
+                    "& .MuiDataGrid-toolbarContainer .MuiButton-text": {
+                        color: `${colors.grey[100]} !important`,
+                    },
                 }}
             >
                 <DataGrid
                     checkboxSelection
-                    rows={results}
+                    rows={rows}
                     columns={columns}
-                    paginationModel={paginationModel}
-                    onPaginationModelChange={setPaginationModel}
+                    pagination
                     paginationMode="server"
                     pageSizeOptions={[25, 50, 100]}
                     rowCount={rowCount}
                     loading={loading}
-                    pagination
+                    page={paginationModel.page}
+                    pageSize={paginationModel.pageSize}
+                    onPageSizeChange={(newPageSize) => setPaginationModel(prev => ({ ...prev, pageSize: newPageSize }))}
+                    onPageChange={(newPage) => setPaginationModel(prev => ({ ...prev, page: newPage }))}
+                    components={{ Toolbar: GridToolbar }}
                 />
             </Box>
         </Box>
     );
 };
 
-export default Team;
+export default Answers;

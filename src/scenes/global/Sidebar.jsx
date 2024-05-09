@@ -133,15 +133,15 @@ const Sidebar = () => {
                             Data
                         </Typography>
                         <Item
-                            title="Manage Team"
-                            to="/team"
+                            title="Manage Questions"
+                            to="/questions"
                             icon={<PeopleOutlinedIcon />}
                             selected={selected}
                             setSelected={setSelected}
                         />
                         <Item
-                            title="Contacts Information"
-                            to="/contacts"
+                            title="Answers Information"
+                            to="/answers"
                             icon={<ContactsOutlinedIcon />}
                             selected={selected}
                             setSelected={setSelected}

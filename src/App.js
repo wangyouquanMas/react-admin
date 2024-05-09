@@ -5,7 +5,9 @@ import { Routes, Route } from "react-router-dom";
 // import Dashboard from "./scenes/dashboard";
 import Sidebar from "./scenes/global/Sidebar";
 import Dashboard from "./scenes/dashboard/index.jsx";
-import Team from "./scenes/team/index.jsx";
+import Questions from "./scenes/questions/index.jsx";
+import Answers from "./scenes/answers/index.jsx";
+
 
 function App() {
   const [theme, colorMode] = useMode();
@@ -21,7 +23,8 @@ function App() {
             <Topbar />
             <Routes>
               <Route path="/" element={<Dashboard />} />
-              <Route path="/team" element={<Team />} />
+              <Route path="/questions" element={<Questions />} />
+              <Route path="/answers" element={<Answers />} />
             </Routes>
           </main>
         </div>
