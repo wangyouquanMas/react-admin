@@ -1,0 +1,36 @@
+{
+    "emotions": {
+        "positive": [
+            "joy",
+            "gratitude",
+            "love",
+            "optimism",
+            "pride",
+            "excitement",
+            "satisfaction",
+            "amusement",
+            "inspiration",
+            "contentment",
+            "wonder",
+            "relief"
+        ],
+        "negative": [
+            "fear",
+            "anger",
+            "sadness",
+            "disgust",
+            "despair",
+            "nervousness",
+            "anxiety",
+            "shame",
+            "guilt",
+            "sadness",
+            "frustration",
+            "despair",
+            "insecurity",
+            "stress",
+            "disappointment",
+            "helplessness"
+        ]
+    }
+}

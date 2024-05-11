@@ -8,56 +8,28 @@ const PieChart = () => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
   const [questionId, setQuestionId] = useState(578277952);
-  const [positiveScore, setPositiveScore] = useState(0);
-  const [negativeScore, setNegativeScore] = useState(0);
-  // const [fearScore, setNegativeScore] = useState(0);
-  // const [anxietyScore, setNegativeScore] = useState(0);
-  // const [anxietyScore, setNegativeScore] = useState(0);
-
-  const positive = new Set([
-    "admiration", "amusement", "approval", "caring", "curiosity", "desire", "excitement", "gratitude", "joy",
-    "love", "optimism", "pride", "realization", "relief", "surprise", "compassion", "interest",
-    "anticipation", "fascination", "encouragement", "appreciation",
-    "satisfaction", "sympathy", "advice", "advocacy", "suggestion", "empathy", "humor", "nostalgia",
-    "recommendation", "hope"
-  ]);
-
-  // const positive = new Set([
-  //   "admiration", "amusement", "caring", "curiosity", "desire", "excitement", "gratitude", "joy",
-  //   "love", "optimism", "pride", "realization", "relief", "surprise", "interest",
-  //   "anticipation", "fascination", "encouragement", "appreciation",
-  //   "satisfaction", "nostalgia", "hope"
-  // ]);
-  // const negative = new Set([
-  //   "anger", "annoyance", "confusion", "disappointment", "disapproval", "disgust", "embarrassment", "fear",
-  //   "grief", "nervousness", "remorse", "sadness", "neutral", "disbelief", "concern", "skepticism",
-  //   "frustration", "disdain", "determination", "discomfort", "dismissal",
-  //   "criticism", "inconvenience", "warning", "offense", "uncertainty", "urgency"
-  // ]);
-
-  const negative = new Set([
-    "anger", "annoyance", "confusion", "disappointment", "disgust", "embarrassment", "fear",
-    "grief", "nervousness", "remorse", "sadness", "concern", "skepticism",
-    "frustration", "disdain", "determination", "discomfort", "criticism", "inconvenience", "offense", "uncertainty", "urgency"
-  ]);
-
-
-  const painpoint = new Set([
-    "fear", "nervousness", "Anger", "Anxiety", "Shame", "Guilt", "Sadness", "Frustration", "Despair", "Insecurity", "Stress", "Disappointment", "Helplessness"
-  ]);
-
-  const exhilarating = new Set([
-    "Joy", "Excitement", "Satisfaction", "Amusement", "Inspiration", "Pride", "Contentment", "Wonder", "Gratitude", "Relief", "Love", "Optimism"
-  ]);
-
-
-
-
-  //todo: capatial unform 
-  //todo: emotion dislay in detail
+  const [emotionConfig, setEmotionConfig] = useState(null);
+  const [data, setData] = useState([]);
 
 
   useEffect(() => {
+    const fetchConfig = async () => {
+      try {
+        const configResponse = await fetch('emotionsConfig.json');
+        const config = await configResponse.json();
+        setEmotionConfig(config.emotions);
+      } catch (error) {
+        console.error('Failed to load configuration:', error);
+      }
+    };
+
+    fetchConfig();
+  }, []);
+
+
+  useEffect(() => {
+    if (!questionId || !emotionConfig) return;
+
     const fetchEmotions = async () => {
       try {
         const response = await fetch(`http://127.0.0.1:8080/emotions/${questionId}`);
@@ -65,44 +37,53 @@ const PieChart = () => {
           throw new Error('Network response was not ok');
         }
         const emotions = await response.json();
-        let tempPositiveScore = 0;
-        let tempNegativeScore = 0;
-        const currentEmotions = emotions.flatMap(item => item.emotion.split(","));
-        currentEmotions.forEach(emotion => {
-          if (positive.has(emotion.trim())) {
-            tempPositiveScore++;
-          } else if (negative.has(emotion.trim())) {
-            tempNegativeScore++;
-          }
+        const emotionScores = {};
+
+        // Process each emotion entry
+        emotions.forEach(emotionData => {
+          // Split the emotion string into individual emotions
+          const splitEmotions = emotionData.emotion.split(",").map(em => em.trim());
+
+          // Categorize each emotion
+          splitEmotions.forEach(singleEmotion => {
+            Object.keys(emotionConfig).forEach(category => {
+              if (emotionConfig[category].includes(singleEmotion)) {
+                if (!emotionScores[category]) {
+                  emotionScores[category] = {};
+                }
+                emotionScores[category][singleEmotion] = (emotionScores[category][singleEmotion] || 0) + 1;
+              }
+            });
+          });
         });
-        setPositiveScore(tempPositiveScore);
-        setNegativeScore(tempNegativeScore);
+
+        // Transform the scores into data suitable for the pie chart
+        const chartData = Object.entries(emotionScores).flatMap(([category, emotions]) => {
+          return Object.entries(emotions).map(([emotionType, count]) => ({
+            id: emotionType,
+            label: emotionType,
+            value: count,
+            color: getColorForCategory(category)
+          }));
+        });
+
+        setData(chartData);
       } catch (error) {
         console.error('Failed to fetch emotions:', error);
       }
     };
 
     fetchEmotions();
-  }, [questionId]);
+  }, [questionId, emotionConfig]);
 
-
-  console.log("positive score:", positiveScore);
-  console.log("negative  score:", negativeScore);
-
-  const data = [
-    {
-      id: "positive",
-      label: "positive",
-      value: positiveScore,
-      color: "hsl(104, 70%, 50%)",
-    },
-    {
-      id: "negative",
-      label: "negative",
-      value: negativeScore,
-      color: "hsl(162, 70%, 50%)",
-    },
-  ];
+  const getColorForCategory = (category) => {
+    const baseColors = {
+      positive: "hsl(104, 70%, 50%)",
+      negative: "hsl(0, 70%, 50%)",
+      // Add other categories as needed
+    };
+    return baseColors[category] || "hsl(210, 70%, 50%)"; // Default color if category not found
+  };
 
 
   return (
