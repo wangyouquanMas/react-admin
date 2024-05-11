@@ -13,7 +13,7 @@ const Answers = () => {
     const [rows, setRows] = useState([]);
     const [rowCount, setRowCount] = useState(0);
     const [loading, setLoading] = useState(false);
-    const [questionId, setQuestionId] = useState(625470953);
+    const [questionId, setQuestionId] = useState(578277952);
     const [paginationModel, setPaginationModel] = useState({
         page: 1,
         pageSize: 100,
@@ -25,6 +25,7 @@ const Answers = () => {
         const fetchData = (questionId) => {
             setLoading(true);
             const { page, pageSize } = paginationModel;
+            console.log("current page1111:", page);
             fetch(`http://127.0.0.1:8080/api/answers?question_id=${questionId}&page=${page}&pageSize=${pageSize}`)
                 .then(response => response.json())
                 .then(response => {
@@ -40,7 +41,7 @@ const Answers = () => {
                     );
                     console.log("current results", results[0]);
                     setRows(results);
-                    setRowCount(response.data.totalCount); // Assume the API returns a total count
+                    setRowCount(response.totalCount); // Assume the API returns a total count
                     setLoading(false);
                 }).catch(error => {
                     console.error('There was an error!', error);
@@ -57,7 +58,7 @@ const Answers = () => {
     const columns = [
         { field: "id", headerName: "ID" },
         { field: "content", headerName: "Content", width: 600 },
-        { field: "emotion", headerName: "Emotion" },
+        { field: "emotion", headerName: "Emotion", width: 300 },
     ];
 
     return (
