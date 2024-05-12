@@ -35,7 +35,9 @@ const Answers = () => {
                         return (
                             answer.content &&
                             answer.emotion !== "" &&
-                            answer.emotion !== undefined
+                            answer.emotion !== undefined &&
+                            answer.reason !== "" &&
+                            answer.reason !== undefined
                         );
                     }
                     );
@@ -59,7 +61,13 @@ const Answers = () => {
         { field: "id", headerName: "ID" },
         { field: "content", headerName: "Content", width: 600 },
         { field: "emotion", headerName: "Emotion", width: 300 },
+        { field: "reason", headerName: "Reason", width: 300 },
     ];
+
+    const autosizeOptions = {
+        includeOutliers: true,
+    };
+
 
     return (
         <Box m="20px">
@@ -103,6 +111,8 @@ const Answers = () => {
                     checkboxSelection
                     rows={rows}
                     columns={columns}
+                    getRowHeight={() => 'auto'}
+                    autosizeOptions={autosizeOptions}
                     pagination
                     paginationMode="server"
                     pageSizeOptions={[25, 50, 100]}
