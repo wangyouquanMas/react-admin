@@ -4,7 +4,7 @@ import { tokens } from "../../theme";
 import Header from "../../components/Header";
 import { useState, useEffect } from "react";
 
-const Questions = () => {
+const Questions = ({ results = [] }) => {
     const theme = useTheme();
     const colors = tokens(theme.palette.mode);
     const [rows, setRows] = useState([]);
@@ -15,36 +15,61 @@ const Questions = () => {
         pageSize: 100,
     });
 
+    console.log("results 222", results);
 
 
     useEffect(() => {
-        const fetchData = (p) => {
-            setLoading(true);
-            const { page, pageSize } = paginationModel;
-            fetch(`http://127.0.0.1:8080/questions?page=${page}&pageSize=${pageSize}`)
-                .then(response => response.json())
-                .then(data => {
-                    const results = data.results.filter(user => {
-                        return (
-                            user.title &&
-                            user.frequency !== null &&
-                            user.frequency !== undefined
-                        );
-                    }
-                    );
-                    console.log("current results", results[0]);
-                    setRows(results);
-                    setRowCount(data.totalCount); // Assume the API returns a total count
-                    setLoading(false);
-                }).catch(error => {
-                    console.error('There was an error!', error);
-                    setLoading(false);
+        const filteredResults = results.filter(user => {
+            return (
+                user.title &&
+                user.frequency !== null &&
+                user.frequency !== undefined
+            );
+        });
+        setRows(filteredResults);
+        setRowCount(filteredResults.length);
+    }, [results]);
 
-                })
-        };
+    // results = results.filter(user => {
+    //     return (
+    //         user.title &&
+    //         user.frequency !== null &&
+    //         user.frequency !== undefined
+    //     );
+    // }
+    // );
+    // console.log("current results", results[0]);
+    // setRows(results);
+    // setRowCount(results.length);
 
-        fetchData();
-    }, [paginationModel]);
+    // useEffect(() => {
+    //     const fetchData = (p) => {
+    //         setLoading(true);
+    //         const { page, pageSize } = paginationModel;
+    //         fetch(`http://127.0.0.1:8080/questions?page=${page}&pageSize=${pageSize}`)
+    //             .then(response => response.json())
+    //             .then(data => {
+    //                 const results = data.results.filter(user => {
+    //                     return (
+    //                         user.title &&
+    //                         user.frequency !== null &&
+    //                         user.frequency !== undefined
+    //                     );
+    //                 }
+    //                 );
+    //                 console.log("current results", results[0]);
+    //                 setRows(results);
+    //                 setRowCount(data.totalCount); // Assume the API returns a total count
+    //                 setLoading(false);
+    //             }).catch(error => {
+    //                 console.error('There was an error!', error);
+    //                 setLoading(false);
+
+    //             })
+    //     };
+
+    //     fetchData();
+    // }, [paginationModel]);
 
 
 
