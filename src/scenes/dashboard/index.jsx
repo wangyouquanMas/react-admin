@@ -9,17 +9,13 @@ import TrafficIcon from "@mui/icons-material/Traffic";
 import Header from "../../components/Header";
 import BarChart from "../../components/BarChart";
 import PieChart from "../../components/PieChart";
-import { useLocation } from 'react-router-dom';
 import Questions from "../questions/index";
+import Answers from "../answers/index";
 
 const Dashboard = () => {
     const theme = useTheme();
     const colors = tokens(theme.palette.mode);
-    const location = useLocation();
-    const { results } = location.state?.results || { results: [] };
 
-    console.log("result exist:", results);
-    <Questions results={results} />
 
     return (
         <Box m="20px">
@@ -44,6 +40,40 @@ const Dashboard = () => {
             </Box>
 
             {/* GRID & CHARTS */}
+            {/* <Box
+                gridColumn="span 4"
+                gridRow="span 2"
+                backgroundColor={colors.primary[400]}
+            >
+                <Typography
+                    variant="h5"
+                    fontWeight="600"
+                    sx={{ padding: "30px 30px 0 30px" }}
+                >
+                    Sales Quantity
+                </Typography>
+                <Box width="100px" height="250px" mt="-20px">
+                    <Questions isDashboard={true} />
+                </Box>
+            </Box> */}
+            {/* 
+            <Box
+                gridColumn="span 4"
+                gridRow="span 2"
+                backgroundColor={colors.primary[400]}
+            >
+                <Typography
+                    variant="h5"
+                    fontWeight="600"
+                    sx={{ padding: "30px 30px 0 30px" }}
+                >
+                    Sales Quantity
+                </Typography>
+                <Box height="250px" mt="-20px">
+                    <Answers isDashboard={true} />
+                </Box>
+            </Box> */}
+
             <Box
                 display="grid"
                 gridTemplateColumns="repeat(12, 1fr)"

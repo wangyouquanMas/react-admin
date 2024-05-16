@@ -10,7 +10,7 @@ import Answers from "./scenes/answers/index.jsx";
 import Emotion from "./scenes/emotion/index.jsx";
 import Triggers from "./scenes/trigger/index.jsx";
 import LandingPage from "./scenes/landing/index.jsx";
-
+import ResultsProvider from './scenes/landing/resultsContext.jsx';
 
 function App() {
   const [theme, colorMode] = useMode();
@@ -23,21 +23,23 @@ function App() {
     <ColorModeContext.Provider value={colorMode}>
       <ThemeProvider theme={theme}>
         <CssBaseline />
-        <div className="app">
-          {/* Render Sidebar and Topbar only if not on the landing page */}
-          {!isLandingPage && <Sidebar />}
-          <main className="content">
-            {!isLandingPage && <Topbar />}
-            <Routes>
-              <Route path="/" element={<LandingPage />} />
-              <Route path="/dashboard" element={<Dashboard />} />
-              <Route path="/questions" element={<Questions />} />
-              <Route path="/answers" element={<Answers />} />
-              <Route path="/emotion" element={<Emotion />} />
-              <Route path="/trigger" element={<Triggers />} />
-            </Routes>
-          </main>
-        </div>
+        <ResultsProvider>
+          <div className="app">
+            {/* Render Sidebar and Topbar only if not on the landing page */}
+            {!isLandingPage && <Sidebar />}
+            <main className="content">
+              {!isLandingPage && <Topbar />}
+              <Routes>
+                <Route path="/" element={<LandingPage />} />
+                <Route path="/dashboard" element={<Dashboard />} />
+                <Route path="/questions" element={<Questions />} />
+                <Route path="/answers" element={<Answers />} />
+                <Route path="/emotion" element={<Emotion />} />
+                <Route path="/trigger" element={<Triggers />} />
+              </Routes>
+            </main>
+          </div>
+        </ResultsProvider>
       </ThemeProvider>
     </ColorModeContext.Provider >
   );

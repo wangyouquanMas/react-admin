@@ -6,9 +6,11 @@ import HotSearch from './hotSearch.jsx';
 import { useNavigate } from 'react-router-dom';
 import Hero from './hero.jsx';
 import Questions from '../questions/index.jsx';
+import { useResults } from './resultsContext.jsx';
+
 
 function LandingPage() {
-    const [results, setResults] = useState([]);
+    const { results, setResults } = useResults();
     const navigate = useNavigate();
 
     const handleResultClick = (item) => {
@@ -28,9 +30,6 @@ function LandingPage() {
                 <SearchBar setResults={setResults} />
                 {displayComponent}
             </div>
-            {/* <div className="search-bar-container">
-                <Questions results={results} />
-            </div> */}
         </div >
     );
 }

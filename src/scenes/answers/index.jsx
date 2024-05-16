@@ -5,21 +5,35 @@ import { mockDataContacts } from "../../data/mockData";
 import Header from "../../components/Header";
 import { useTheme } from "@mui/material";
 import { useState, useEffect } from "react";
+import { useLocation } from 'react-router-dom';
 
 
 const Answers = () => {
+    const location = useLocation();
     const theme = useTheme();
     const colors = tokens(theme.palette.mode);
     const [rows, setRows] = useState([]);
     const [rowCount, setRowCount] = useState(0);
     const [loading, setLoading] = useState(false);
-    const [questionId, setQuestionId] = useState(578277952);
+    const [questionId, setQuestionId] = useState();
     const [paginationModel, setPaginationModel] = useState({
         page: 1,
         pageSize: 100,
     });
 
 
+    useEffect(() => {
+        if (location.state && location.state.questionId) {
+            setQuestionId(location.state.questionId);
+            localStorage.setItem("questionId", location.state.questionId); // Save to local storage
+        } else {
+            const storedQuestionId = localStorage.getItem("questionId");
+            if (storedQuestionId) {
+                setQuestionId(storedQuestionId);
+            }
+        }
+        console.log("questionId log:", questionId);
+    }, [location.state]);
 
     useEffect(() => {
         const fetchData = (questionId) => {
@@ -52,8 +66,10 @@ const Answers = () => {
                 })
         };
 
-        fetchData(questionId);
-    }, [paginationModel]);
+        if (questionId) {
+            fetchData(questionId);
+        }
+    }, [paginationModel, questionId]);
 
 
 

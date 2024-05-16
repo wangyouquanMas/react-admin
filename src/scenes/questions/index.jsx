@@ -3,8 +3,12 @@ import { DataGrid } from "@mui/x-data-grid";
 import { tokens } from "../../theme";
 import Header from "../../components/Header";
 import { useState, useEffect } from "react";
+import { useResults } from "../landing/resultsContext.jsx";
+import { useNavigate } from 'react-router-dom'; // Import useHistory
 
-const Questions = ({ results = [] }) => {
+
+const Questions = () => {
+    const { results } = useResults();
     const theme = useTheme();
     const colors = tokens(theme.palette.mode);
     const [rows, setRows] = useState([]);
@@ -15,32 +19,27 @@ const Questions = ({ results = [] }) => {
         pageSize: 100,
     });
 
-    console.log("results 222", results);
-
+    const navigate = useNavigate(); // For navigation
 
     useEffect(() => {
         const filteredResults = results.filter(user => {
             return (
                 user.title &&
+                user.uid &&
                 user.frequency !== null &&
                 user.frequency !== undefined
-            );
-        });
-        setRows(filteredResults);
-        setRowCount(filteredResults.length);
-    }, [results]);
 
-    // results = results.filter(user => {
-    //     return (
-    //         user.title &&
-    //         user.frequency !== null &&
-    //         user.frequency !== undefined
-    //     );
-    // }
-    // );
-    // console.log("current results", results[0]);
-    // setRows(results);
-    // setRowCount(results.length);
+
+            );
+        }
+        );
+        console.log("current results", filteredResults[0]);
+        setRows(filteredResults);
+        setRowCount(filteredResults.length); // Assume the API returns a total count
+        setLoading(false);
+    }, [results])
+
+
 
     // useEffect(() => {
     //     const fetchData = (p) => {
@@ -74,8 +73,24 @@ const Questions = ({ results = [] }) => {
 
 
     const columns = [
-        { field: "id", headerName: "ID" },
-        { field: "title", headerName: "Title", width: 600 },
+        { field: "uid", headerName: "ID" },
+        {
+            field: "title",
+            headerName: "Title",
+            width: 600,
+            renderCell: (params) => (
+                <div
+                    style={{ cursor: 'pointer', textDecoration: 'underline' }}
+                    onClick={() => {
+                        let id = params.row.uid;
+                        localStorage.setItem("questionId", id); // Save questionId to local storage
+                        navigate(`/answers`, { state: { questionId: id } }); // Navigate on click
+                    }}
+                >
+                    {params.value}
+                </div>
+            )
+        },
         { field: "frequency", headerName: "Frequency" }
     ];
 
