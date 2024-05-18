@@ -20,19 +20,25 @@ const Questions = () => {
     });
 
     const navigate = useNavigate(); // For navigation
+    let filteredResults = [];
 
     useEffect(() => {
-        const filteredResults = results.filter(user => {
-            return (
-                user.title &&
-                user.uid &&
-                user.frequency !== null &&
-                user.frequency !== undefined
-
-
-            );
+        if (results && results.length) {
+            filteredResults = results.filter(user => {
+                return (
+                    user.title &&
+                    user.uid &&
+                    user.frequency !== null &&
+                    user.frequency !== undefined
+                );
+            });
+            localStorage.setItem("results", JSON.stringify(filteredResults));
+        } else {
+            const storedResults = localStorage.getItem("results");
+            if (storedResults) {
+                filteredResults = JSON.parse(storedResults);
+            }
         }
-        );
         console.log("current results", filteredResults[0]);
         setRows(filteredResults);
         setRowCount(filteredResults.length); // Assume the API returns a total count

@@ -1,4 +1,4 @@
-import { Box } from "@mui/material";
+import { Box, Button, Select, MenuItem, FormControl, InputLabel } from "@mui/material";
 import { DataGrid, GridToolbar } from "@mui/x-data-grid";
 import { tokens } from "../../theme";
 import { mockDataContacts } from "../../data/mockData";
@@ -6,7 +6,7 @@ import Header from "../../components/Header";
 import { useTheme } from "@mui/material";
 import { useState, useEffect } from "react";
 import { useLocation } from 'react-router-dom';
-
+import { useNavigate } from 'react-router-dom';
 
 const Answers = () => {
     const location = useLocation();
@@ -16,12 +16,13 @@ const Answers = () => {
     const [rowCount, setRowCount] = useState(0);
     const [loading, setLoading] = useState(false);
     const [questionId, setQuestionId] = useState();
+    const [analysisOption, setAnalysisOption] = useState("");
     const [paginationModel, setPaginationModel] = useState({
         page: 1,
         pageSize: 100,
     });
 
-
+    const navigate = useNavigate(); // For navigation
     useEffect(() => {
         if (location.state && location.state.questionId) {
             setQuestionId(location.state.questionId);
@@ -84,6 +85,14 @@ const Answers = () => {
         includeOutliers: true,
     };
 
+    const handleAnalysisChange = (event) => {
+        setAnalysisOption(event.target.value);
+    };
+
+    const handleAnalysisClick = () => {
+        console.log(`Selected analysis option: ${analysisOption}`);
+        // Add your analysis logic here based on the selected option
+    };
 
     return (
         <Box m="20px">
@@ -91,8 +100,27 @@ const Answers = () => {
                 title="Answers"
                 subtitle="List of Answers for Product Analysis"
             />
+            <Box display="flex" justifyContent="flex-end" alignItems="center" mb={2}  >
+                <FormControl sx={{ minWidth: 150, mr: 2 }}>
+                    <InputLabel id="analysis-select-label">Analysis</InputLabel>
+                    <Select
+                        labelId="analysis-select-label"
+                        value={analysisOption}
+                        label="Analysis"
+                        onChange={handleAnalysisChange}
+                    >
+                        <MenuItem value="painpoint">Painpoint</MenuItem>
+                        <MenuItem value="category">Category</MenuItem>
+                        <MenuItem value="addiction">Addiction</MenuItem>
+                    </Select>
+                </FormControl>
+                <Button
+                    variant="contained"
+                    onClick={handleAnalysisClick}
+                >Analysis</Button>
+            </Box>
             <Box
-                m="40px 0 0 0"
+                mt={1}
                 height="75vh"
                 sx={{
                     "& .MuiDataGrid-root": {
@@ -139,9 +167,12 @@ const Answers = () => {
                     onPageSizeChange={(newPageSize) => setPaginationModel(prev => ({ ...prev, pageSize: newPageSize }))}
                     onPageChange={(newPage) => setPaginationModel(prev => ({ ...prev, page: newPage }))}
                     components={{ Toolbar: GridToolbar }}
+                    componentsProps={{
+                        toolbar: { sx: { mt: -6 } } // Adds margin bottom to the toolbar
+                    }}
                 />
             </Box>
-        </Box>
+        </Box >
     );
 };
 
