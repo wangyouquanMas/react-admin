@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 
 import { FaSearch } from "react-icons/fa";
 
-function SearchBar({ setResults }) {
+function SearchBar({ setResults, setProducts }) {
 
     const [input, setValue] = useState("");
 
@@ -14,7 +14,7 @@ function SearchBar({ setResults }) {
             return;
         }
 
-        const url = new URL("http://127.0.0.1:8080/search");
+        let url = new URL("http://127.0.0.1:8080/search");
         url.searchParams.append('query', value);
         console.log("url:", url);
         fetch(url)
@@ -30,6 +30,25 @@ function SearchBar({ setResults }) {
                 console.log("result:", results);
                 setResults(results);
             });
+
+
+        url = new URL("http://127.0.0.1:8080/products");
+        url.searchParams.append('query', value);
+        console.log("url:", url);
+        fetch(url)
+            .then((response) => response.json())
+            .then(data => {
+                console.log(data); // See what the data actually is.
+                console.log(Array.isArray(data)); // Check if it's an array.
+                console.log("data:", data);
+                const results = data.map((content) => {
+
+                    return { name: content.source.name, description: content.source.description }; //value : no input no display 
+                });
+                console.log("result:", results);
+                setProducts(results);
+            });
+
     };
 
 

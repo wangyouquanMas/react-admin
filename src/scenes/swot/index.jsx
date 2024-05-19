@@ -8,7 +8,7 @@ import { useNavigate } from 'react-router-dom'; // Import useHistory
 
 
 const SWOT = () => {
-    const { results } = useResults();
+    const { products } = useResults();
     const theme = useTheme();
     const colors = tokens(theme.palette.mode);
     const [rows, setRows] = useState([]);
@@ -19,22 +19,22 @@ const SWOT = () => {
         pageSize: 100,
     });
 
+    console.log("products:", products);
+
     const navigate = useNavigate(); // For navigation
     let filteredResults = [];
 
     useEffect(() => {
-        if (results && results.length) {
-            filteredResults = results.filter(user => {
+        if (products && products.length) {
+            filteredResults = products.filter(user => {
                 return (
-                    user.title &&
-                    user.uid &&
-                    user.frequency !== null &&
-                    user.frequency !== undefined
+                    user.name &&
+                    user.description
                 );
             });
-            localStorage.setItem("results", JSON.stringify(filteredResults));
+            localStorage.setItem("products", JSON.stringify(filteredResults));
         } else {
-            const storedResults = localStorage.getItem("results");
+            const storedResults = localStorage.getItem("products");
             if (storedResults) {
                 filteredResults = JSON.parse(storedResults);
             }
@@ -43,7 +43,7 @@ const SWOT = () => {
         setRows(filteredResults);
         setRowCount(filteredResults.length); // Assume the API returns a total count
         setLoading(false);
-    }, [results])
+    }, [products])
 
 
 
@@ -79,25 +79,12 @@ const SWOT = () => {
 
 
     const columns = [
-        { field: "uid", headerName: "ID" },
         {
-            field: "title",
-            headerName: "Title",
-            width: 600,
-            renderCell: (params) => (
-                <div
-                    style={{ cursor: 'pointer', textDecoration: 'underline' }}
-                    onClick={() => {
-                        let id = params.row.uid;
-                        localStorage.setItem("questionId", id); // Save questionId to local storage
-                        navigate(`/answers`, { state: { questionId: id } }); // Navigate on click
-                    }}
-                >
-                    {params.value}
-                </div>
-            )
+            field: "name",
+            headerName: "Name",
+            width: 200,
         },
-        { field: "frequency", headerName: "Frequency" }
+        { field: "description", headerName: "Description", width: 600 }
     ];
 
 
@@ -138,6 +125,7 @@ const SWOT = () => {
                     checkboxSelection
                     rows={rows}
                     columns={columns}
+                    getRowHeight={() => 'auto'}
                     pagination
                     paginationMode="server"
                     pageSizeOptions={[25, 50, 100]}
@@ -147,7 +135,7 @@ const SWOT = () => {
                     pageSize={paginationModel.pageSize}
                     onPageSizeChange={(newPageSize) => setPaginationModel(prev => ({ ...prev, pageSize: newPageSize }))}
                     onPageChange={(newPage) => setPaginationModel(prev => ({ ...prev, page: newPage }))}
-                    getRowId={(row) => row.uid} // Specify custom ID using getRowId
+                    getRowId={(row) => row.name} // Specify custom ID using getRowId
                 />
             </Box>
         </Box>
