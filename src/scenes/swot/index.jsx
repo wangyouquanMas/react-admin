@@ -7,7 +7,7 @@ import { useResults } from "../landing/resultsContext.jsx";
 import { useNavigate } from 'react-router-dom'; // Import useHistory
 
 
-const Questions = () => {
+const SWOT = () => {
     const { results } = useResults();
     const theme = useTheme();
     const colors = tokens(theme.palette.mode);
@@ -104,7 +104,7 @@ const Questions = () => {
 
     return (
         <Box m="20px">
-            <Header title="Questions" subtitle="Managing the questions" />
+            <Header title="SWOT" subtitle="Competition and Risk Analysis" />
             <Box
                 m="40px 0 0 0"
                 height="75vh"
@@ -154,4 +154,4 @@ const Questions = () => {
     );
 };
 
-export default Questions;
+export default SWOT;

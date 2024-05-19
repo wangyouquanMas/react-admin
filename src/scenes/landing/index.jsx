@@ -11,14 +11,9 @@ import { useResults } from './resultsContext.jsx';
 
 function LandingPage() {
     const { results, setResults } = useResults();
-    const navigate = useNavigate();
-
-    const handleResultClick = (item) => {
-        navigate('/dashboard', { state: { results } });
-    };
 
     const displayComponent = results.length > 0 ?
-        <SearchResultsList results={results} onResultClick={handleResultClick} /> :
+        <SearchResultsList results={results} /> :
         <HotSearch />;
 
 

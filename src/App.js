@@ -11,6 +11,10 @@ import Emotion from "./scenes/emotion/index.jsx";
 import Triggers from "./scenes/trigger/index.jsx";
 import LandingPage from "./scenes/landing/index.jsx";
 import ResultsProvider from './scenes/landing/resultsContext.jsx';
+import Products from './scenes/products/index.jsx';
+import SWOT from './scenes/swot/index.jsx';
+
+
 
 function App() {
   const [theme, colorMode] = useMode();
@@ -36,6 +40,8 @@ function App() {
                 <Route path="/answers" element={<Answers />} />
                 <Route path="/emotion" element={<Emotion />} />
                 <Route path="/trigger" element={<Triggers />} />
+                <Route path="/products" element={<Products />} />
+                <Route path="/swot" element={<SWOT />} />
               </Routes>
             </main>
           </div>
