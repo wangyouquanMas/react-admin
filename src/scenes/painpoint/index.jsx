@@ -42,12 +42,27 @@ const MindMap = () => {
     }, [content]); // Dependency array with content
 
     console.log("mindMapData:", mindMapData);
+    const customNodeShape = {
+        shape: 'circle',
+        shapeProps: {
+            r: 10, // adjust the radius as needed
+            fill: 'lightblue', // fill color of the node circle
+        },
+        textProps: {
+            x: 0,
+            y: 0,
+            dy: '.35em',
+            textAnchor: 'middle',
+            fill: 'white', // font color of the node text
+            fontSize: '12px', // font size of the node text
+        },
+    };
 
     return (
         <div style={containerStyles}>
             <Tree data={mindMapData} orientation={direction} rootNodeClassName="node__root"
                 branchNodeClassName="node__branch"
-                leafNodeClassName="node__leaf" />
+                leafNodeClassName="node__leaf" nodeSvgShape={customNodeShape} />
         </div>
     );
 };
