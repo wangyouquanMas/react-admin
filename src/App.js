@@ -13,6 +13,7 @@ import LandingPage from "./scenes/landing/index.jsx";
 import ResultsProvider from './scenes/landing/resultsContext.jsx';
 import Products from './scenes/products/index.jsx';
 import SWOT from './scenes/swot/index.jsx';
+import MindMap from "./scenes/painpoint/index.jsx"; // Adjust the import path as necessary
 
 
 
@@ -42,6 +43,7 @@ function App() {
                 <Route path="/trigger" element={<Triggers />} />
                 <Route path="/products" element={<Products />} />
                 <Route path="/swot" element={<SWOT />} />
+                <Route path="/mindMap" element={<MindMap />} />
               </Routes>
             </main>
           </div>
