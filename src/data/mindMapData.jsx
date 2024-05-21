@@ -1,4 +1,4 @@
-export const mindMapData = {
+export const initialMindMapData = {
     name: "失业程序员面临的焦虑来源",
     children: [
         {
