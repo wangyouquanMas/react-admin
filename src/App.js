@@ -13,7 +13,11 @@ import LandingPage from "./scenes/landing/index.jsx";
 import ResultsProvider from './scenes/landing/resultsContext.jsx';
 import Products from './scenes/products/index.jsx';
 import SWOT from './scenes/swot/index.jsx';
-import MindMap from "./scenes/painpoint/index.jsx"; // Adjust the import path as necessary
+// import MindMap from "./scenes/painpoint1/index.jsx"; // Adjust the import path as necessary
+import Painpoints from './scenes/painpoint/index.jsx';
+import Psychologys from './scenes/psychology/index.jsx';
+import PsychologyAnalysis from './scenes/psychology_analysis/index.jsx';
+import { useState } from "react";
 
 
 
@@ -23,6 +27,8 @@ function App() {
 
   // Determine if the current route is the landing page
   const isLandingPage = location.pathname === "/";
+
+
   //TODO   
   return (
     <ColorModeContext.Provider value={colorMode}>
@@ -43,7 +49,10 @@ function App() {
                 <Route path="/trigger" element={<Triggers />} />
                 <Route path="/products" element={<Products />} />
                 <Route path="/swot" element={<SWOT />} />
-                <Route path="/mindMap" element={<MindMap />} />
+                {/* <Route path="/mindMap" element={<MindMap />} /> */}
+                <Route path="/painpoint" element={<Painpoints />} />
+                <Route path="/psychology" element={<Psychologys />} />
+                <Route path="/psychology_analysis" element={<PsychologyAnalysis />} />
               </Routes>
             </main>
           </div>

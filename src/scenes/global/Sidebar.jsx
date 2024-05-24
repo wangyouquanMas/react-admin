@@ -169,8 +169,8 @@ const Sidebar = () => {
                             setSelected={setSelected}
                         />
                         <Item
-                            title="Calendar"
-                            to="/calendar"
+                            title="Psychology"
+                            to="/psychology"
                             icon={<CalendarTodayOutlinedIcon />}
                             selected={selected}
                             setSelected={setSelected}
@@ -205,15 +205,15 @@ const Sidebar = () => {
                             setSelected={setSelected}
                         />
                         <Item
-                            title="Painpoint"
-                            to="/mindMap"
+                            title="Psychology analysis"
+                            to="/psychology_analysis"
                             icon={<TimelineOutlinedIcon />}
                             selected={selected}
                             setSelected={setSelected}
                         />
                         <Item
-                            title="Geography Chart"
-                            to="/geography"
+                            title="Painpoint"
+                            to="/painpoint"
                             icon={<MapOutlinedIcon />}
                             selected={selected}
                             setSelected={setSelected}

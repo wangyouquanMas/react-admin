@@ -1,70 +1,77 @@
 import React, { useEffect, useState } from "react";
-
 import { FaSearch } from "react-icons/fa";
 
-function SearchBar({ setResults, setProducts }) {
-
+function SearchBar({ setResults, setProducts, setPainpoints, setPsychology }) {
     const [input, setValue] = useState("");
 
-
-    const fetchData = (value) => {
+    const fetchData = async (value) => {
         if (!value) {
             console.log("No input provided");
             setResults([]);
+            setProducts([]);
+            setPainpoints([]);
             return;
         }
 
-        let url = new URL("http://127.0.0.1:8080/search");
-        url.searchParams.append('query', value);
-        console.log("url:", url);
-        fetch(url)
-            .then((response) => response.json())
-            .then(data => {
-                console.log(data); // See what the data actually is.
-                console.log(Array.isArray(data)); // Check if it's an array.
-                console.log("data:", data);
-                const results = data.map((content) => {
+        try {
+            let url = new URL("http://127.0.0.1:8080/search");
+            url.searchParams.append('query', value);
+            console.log("url:", url);
+            const searchResponse = await fetch(url);
+            const searchData = await searchResponse.json();
+            console.log(searchData);
+            const searchResults = searchData.map((content) => {
+                return { uid: content.source.uid, title: content.source.title, frequency: content.source.frequency };
+            });
+            console.log("searchResults:", searchResults);
+            setResults(searchResults);
 
-                    return { uid: content.source.uid, title: content.source.title, frequency: content.source.frequency }; //value : no input no display 
-                });
-                console.log("result:", results);
-                setResults(results);
+            url = new URL("http://127.0.0.1:8080/products");
+            url.searchParams.append('query', value);
+            console.log("url:", url);
+            const productsResponse = await fetch(url);
+            const productsData = await productsResponse.json();
+            console.log(productsData);
+            const productsResults = productsData.map((content) => {
+                return { name: content.source.name, description: content.source.description };
+            });
+            console.log("productsResults:", productsResults);
+            setProducts(productsResults);
+
+
+
+            url = new URL("http://127.0.0.1:8080/psychology");
+            url.searchParams.append('query', value);
+            console.log("url:", url);
+            const psychologyResponse = await fetch(url);
+            const psychologyData = await psychologyResponse.json();
+            console.log(psychologyData);
+            const psychologyResults = psychologyData.map((content) => {
+                return { name: content.source.name, description: content.source.description, id: content.source.id, psychology_id: content.source.psychology_id, frequency: content.source.frequency };
+            });
+            console.log("psychologyResults:", psychologyResults);
+            setPsychology(psychologyResults);
+
+            const openaiResponse = await fetch('http://172.235.13.33:5001/analyze', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ content: value }) // Assuming 'value' is the content to be sent to OpenAI API
             });
 
+            if (!openaiResponse.ok) {
+                throw new Error('Network response was not ok');
+            }
 
-        url = new URL("http://127.0.0.1:8080/products");
-        url.searchParams.append('query', value);
-        console.log("url:", url);
-        fetch(url)
-            .then((response) => response.json())
-            .then(data => {
-                console.log(data); // See what the data actually is.
-                console.log(Array.isArray(data)); // Check if it's an array.
-                console.log("data:", data);
-                const results = data.map((content) => {
+            const openaiResult = await openaiResponse.json();
+            console.log("openaiResult:", openaiResult);
+            setPainpoints(openaiResult.text);
 
-                    return { name: content.source.name, description: content.source.description }; //value : no input no display 
-                });
-                console.log("result:", results);
-                setProducts(results);
-            });
-
+        } catch (error) {
+            console.error('There was a problem with the fetch operation:', error);
+        }
     };
-
-
-
-    // const fetchData = () => {
-    //     fetch("/questions").then(
-    //         response => response.json()
-    //     ).then(
-    //         data => {
-    //             // setResults(data)
-    //             console.log(data);
-    //         }
-    //     )
-    // };
-
-
 
     const handleChange = (event) => {
         setValue(event.target.value);
@@ -90,6 +97,7 @@ function SearchBar({ setResults, setProducts }) {
                 Search
             </button>
         </div>
-    )
+    );
 }
-export default SearchBar
+
+export default SearchBar;

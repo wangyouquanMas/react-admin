@@ -7,8 +7,8 @@ import { useResults } from "../landing/resultsContext.jsx";
 import { useNavigate } from 'react-router-dom'; // Import useHistory
 
 
-const Questions = () => {
-    const { results } = useResults();
+const Psychologys = () => {
+    const { psychology } = useResults();
     const theme = useTheme();
     const colors = tokens(theme.palette.mode);
     const [rows, setRows] = useState([]);
@@ -22,28 +22,29 @@ const Questions = () => {
     const navigate = useNavigate(); // For navigation
     let filteredResults = [];
 
+    console.log("psychology：", psychology);
+
     useEffect(() => {
-        if (results && results.length) {
-            filteredResults = results.filter(user => {
+        if (psychology && psychology.length) {
+            filteredResults = psychology.filter(user => {
                 return (
-                    user.title &&
-                    user.uid &&
-                    user.frequency !== null &&
-                    user.frequency !== undefined
+                    user.name &&
+                    user.id
                 );
             });
-            localStorage.setItem("questions", JSON.stringify(filteredResults));
+            console.log("filteredResults:", filteredResults)
+            localStorage.setItem("results", JSON.stringify(filteredResults));
         } else {
-            const storedResults = localStorage.getItem("questions");
+            const storedResults = localStorage.getItem("results");
             if (storedResults) {
                 filteredResults = JSON.parse(storedResults);
             }
         }
-        console.log("current results111", filteredResults[0]);
+        console.log("current results", filteredResults[0]);
         setRows(filteredResults);
         setRowCount(filteredResults.length); // Assume the API returns a total count
         setLoading(false);
-    }, [results])
+    }, [psychology])
 
 
 
@@ -79,24 +80,25 @@ const Questions = () => {
 
 
     const columns = [
-        { field: "uid", headerName: "ID" },
+        { field: "id", headerName: "ID" },
+        { field: "psychology_id", headerName: "PID" },
         {
-            field: "title",
-            headerName: "Title",
-            width: 600,
+            field: "name",
+            headerName: "Name",
             renderCell: (params) => (
                 <div
                     style={{ cursor: 'pointer', textDecoration: 'underline' }}
                     onClick={() => {
-                        let id = params.row.uid;
-                        localStorage.setItem("questionId", id); // Save questionId to local storage
-                        navigate(`/answers`, { state: { questionId: id } }); // Navigate on click
+                        let id = params.row.id;
+                        localStorage.setItem("pid", id); // Save questionId to local storage
+                        navigate(`/psychology_analysis`, { state: { pid: id } }); // Navigate on click
                     }}
                 >
                     {params.value}
                 </div>
             )
         },
+        { field: "description", headerName: "Description", width: 500 },
         { field: "frequency", headerName: "Frequency" }
     ];
 
@@ -104,7 +106,7 @@ const Questions = () => {
 
     return (
         <Box m="20px">
-            <Header title="Questions" subtitle="Managing the questions" />
+            <Header title="Psychology" subtitle="Related psychology" />
             <Box
                 m="40px 0 0 0"
                 height="75vh"
@@ -138,6 +140,7 @@ const Questions = () => {
                     checkboxSelection
                     rows={rows}
                     columns={columns}
+                    getRowHeight={() => 'auto'}
                     pagination
                     paginationMode="server"
                     pageSizeOptions={[25, 50, 100]}
@@ -147,11 +150,11 @@ const Questions = () => {
                     pageSize={paginationModel.pageSize}
                     onPageSizeChange={(newPageSize) => setPaginationModel(prev => ({ ...prev, pageSize: newPageSize }))}
                     onPageChange={(newPage) => setPaginationModel(prev => ({ ...prev, page: newPage }))}
-                    getRowId={(row) => row.uid} // Specify custom ID using getRowId
+                    getRowId={(row) => row.id} // Specify custom ID using getRowId
                 />
             </Box>
         </Box>
     );
 };
 
-export default Questions;
+export default Psychologys;

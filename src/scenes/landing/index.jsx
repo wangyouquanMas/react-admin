@@ -10,12 +10,12 @@ import { useResults } from './resultsContext.jsx';
 
 
 function LandingPage() {
-    const { results, setResults, products, setProducts } = useResults();
+    const { results, setResults, products, setProducts, painpoints, setPainpoints, psychology, setPsychology } = useResults();
 
     //TODO: set another state or SWOT 
 
     const displayComponent = results.length > 0 ?
-        <SearchResultsList results={results} products={products} /> :
+        <SearchResultsList results={results} products={products} painpoints={painpoints} /> :
         <HotSearch />;
 
 
@@ -23,7 +23,7 @@ function LandingPage() {
         <div >
             <div className="flex  flex-col items-center ">
                 <Hero />
-                <SearchBar setResults={setResults} setProducts={setProducts} />
+                <SearchBar setResults={setResults} setProducts={setProducts} setPainpoints={setPainpoints} setPsychology={setPsychology} />
                 {displayComponent}
             </div>
         </div >
