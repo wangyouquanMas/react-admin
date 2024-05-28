@@ -32,38 +32,6 @@ const Painpoints = () => {
     }, [painpoints]);
 
 
-    // const [data, setData] = useState(null);
-
-    // useEffect(() => {
-    //     // Function to call the API
-    //     const fetchData = async () => {
-    //         try {
-    //             const response = await fetch('http://172.235.13.33:5001/analyze', {
-    //                 method: 'POST',
-    //                 headers: {
-    //                     'Content-Type': 'application/json'
-    //                 },
-    //                 body: JSON.stringify({ content: content })
-    //             });
-
-    //             if (!response.ok) {
-    //                 throw new Error('Network response was not ok');
-    //             }
-
-    //             const result = await response.json();
-    //             console.log("result:", result);
-    //             setMarkdown(result.text);
-    //         } catch (error) {
-    //             console.error('There was a problem with the fetch operation:', error);
-    //         }
-    //     };
-
-    //     fetchData();
-    // }, [content]);
-
-
-
-
     useEffect(() => {
         if (!markdown) return;
 

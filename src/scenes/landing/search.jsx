@@ -26,6 +26,8 @@ function SearchBar({ setResults, setProducts, setPainpoints, setPsychology }) {
             console.log("searchResults:", searchResults);
             setResults(searchResults);
 
+
+
             url = new URL("http://127.0.0.1:8080/products");
             url.searchParams.append('query', value);
             console.log("url:", url);
@@ -40,33 +42,33 @@ function SearchBar({ setResults, setProducts, setPainpoints, setPsychology }) {
 
 
 
-            url = new URL("http://127.0.0.1:8080/psychology");
-            url.searchParams.append('query', value);
-            console.log("url:", url);
-            const psychologyResponse = await fetch(url);
-            const psychologyData = await psychologyResponse.json();
-            console.log(psychologyData);
-            const psychologyResults = psychologyData.map((content) => {
-                return { name: content.source.name, description: content.source.description, id: content.source.id, psychology_id: content.source.psychology_id, frequency: content.source.frequency };
-            });
-            console.log("psychologyResults:", psychologyResults);
-            setPsychology(psychologyResults);
+            // url = new URL("http://127.0.0.1:8080/psychology");
+            // url.searchParams.append('query', value);
+            // console.log("url:", url);
+            // const psychologyResponse = await fetch(url);
+            // const psychologyData = await psychologyResponse.json();
+            // console.log(psychologyData);
+            // const psychologyResults = psychologyData.map((content) => {
+            //     return { name: content.source.name, description: content.source.description, id: content.source.id, psychology_id: content.source.psychology_id, frequency: content.source.frequency };
+            // });
+            // console.log("psychologyResults:", psychologyResults);
+            // setPsychology(psychologyResults);
 
-            const openaiResponse = await fetch('http://172.235.13.33:5001/analyze', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({ content: value }) // Assuming 'value' is the content to be sent to OpenAI API
-            });
+            // const openaiResponse = await fetch('http://172.235.13.33:5001/analyze', {
+            //     method: 'POST',
+            //     headers: {
+            //         'Content-Type': 'application/json'
+            //     },
+            //     body: JSON.stringify({ content: value }) // Assuming 'value' is the content to be sent to OpenAI API
+            // });
 
-            if (!openaiResponse.ok) {
-                throw new Error('Network response was not ok');
-            }
+            // if (!openaiResponse.ok) {
+            //     throw new Error('Network response was not ok');
+            // }
 
-            const openaiResult = await openaiResponse.json();
-            console.log("openaiResult:", openaiResult);
-            setPainpoints(openaiResult.text);
+            // const openaiResult = await openaiResponse.json();
+            // console.log("openaiResult:", openaiResult);
+            // setPainpoints(openaiResult.text);
 
         } catch (error) {
             console.error('There was a problem with the fetch operation:', error);
