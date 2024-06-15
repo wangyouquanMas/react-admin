@@ -34,7 +34,7 @@ const Hero = () => {
                     <span ref={elRef} className='md:text-5xl sm:text-4xl text-xl font-bold md:pl-4 pl-2'></span>
                 </div>
                 <p className='md:text-2xl text-xl font-bold text-gray-500'>Knowing what to do matters than how to do it.</p>
-                <button className='bg-[#00df9a] w-[200px] rounded-md font-medium my-6 mx-auto py-3 text-black'>Input your Idea</button>
+                {/* <button className='bg-[#00df9a] w-[200px] rounded-md font-medium my-6 mx-auto py-3 text-black'>Input your Idea</button> */}
             </div>
         </div>
     );

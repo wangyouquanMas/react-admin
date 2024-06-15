@@ -4,7 +4,7 @@ import { useTheme } from "@mui/material";
 import { mockPieData as data } from "../data/mockData";
 import { useEffect, useState } from "react";
 
-const PieChart = () => {
+const PieChart = ({ searchQuery }) => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
   const [questionId, setQuestionId] = useState(578277952);
@@ -25,6 +25,11 @@ const PieChart = () => {
 
     fetchConfig();
   }, []);
+
+
+  useEffect(() => {
+    setQuestionId(searchQuery);
+  }, [searchQuery]);
 
 
   useEffect(() => {

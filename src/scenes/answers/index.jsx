@@ -52,7 +52,17 @@ const Answers = () => {
                             answer.emotion !== "" &&
                             answer.emotion !== undefined &&
                             answer.reason !== "" &&
-                            answer.reason !== undefined
+                            answer.reason !== undefined &&
+                            answer.voteup_count >= 0 &&
+                            answer.voteup_count !== undefined &&
+                            answer.comment_count !== "" &&
+                            answer.comment_count !== undefined &&
+                            answer.favlists_count !== "" &&
+                            answer.favlists_count !== undefined &&
+                            answer.category !== "" &&
+                            answer.category !== undefined &&
+                            answer.sub_category !== "" &&
+                            answer.sub_category !== undefined
                         );
                     }
                     );
@@ -78,7 +88,12 @@ const Answers = () => {
         { field: "id", headerName: "ID" },
         { field: "content", headerName: "Content", width: 600 },
         { field: "emotion", headerName: "Emotion", width: 300 },
+        { field: "category", headerName: "category", width: 100 },
+        { field: "sub_category", headerName: "subCategory", width: 100 },
         { field: "reason", headerName: "Reason", width: 300 },
+        { field: "voteup_count", headerName: "vote", width: 100 },
+        { field: "comment_count", headerName: "comment", width: 100 },
+        { field: "favlists_count", headerName: "favlists", width: 100 },
     ];
 
     const autosizeOptions = {

@@ -3,12 +3,15 @@ import { ResponsiveBar } from "@nivo/bar";
 import { tokens } from "../theme";
 import { useEffect, useState } from "react";
 
-const BarChart = ({ isDashboard = false, questionId }) => {
+const BarChart = ({ isDashboard = false, searchId }) => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
   const [data, setData] = useState([]);
+  const [questionId, setQuestionId] = useState(320535511);
 
-  questionId = 320535511;
+  useEffect(() => {
+    setQuestionId(searchId);
+  }, [searchId]);
 
   useEffect(() => {
     const fetchTriggers = async () => {
@@ -20,7 +23,7 @@ const BarChart = ({ isDashboard = false, questionId }) => {
         const triggers = await response.json();
 
         const formattedData = triggers.map(trigger => ({
-          tigger: trigger.category,
+          tigger: trigger.sub_category,
           "hot dog": trigger.frequency, // Assuming 'hot dog' is a placeholder for frequency
           "hot dogColor": `hsl(${Math.random() * 360}, 70%, 50%)`, // Random color generation for illustrative purposes
         }));
