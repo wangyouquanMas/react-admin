@@ -105,9 +105,22 @@ const Answers = () => {
     };
 
     const handleAnalysisClick = () => {
-        console.log(`Selected analysis option: ${analysisOption}`);
-        // Add your analysis logic here based on the selected option
+        fetch('http://172.235.13.33:5002/emotion', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ question_id: questionId, analysis_option: analysisOption }),
+        })
+            .then(response => response.json())
+            .then(data => {
+                console.log(data);
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+            });
     };
+
 
     return (
         <Box m="20px">

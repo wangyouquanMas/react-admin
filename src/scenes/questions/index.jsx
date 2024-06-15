@@ -1,10 +1,12 @@
-import { Box, Typography, useTheme } from "@mui/material";
+import React from 'react';
+import { Box, IconButton, Typography, useTheme } from "@mui/material";
+import SyncIcon from '@mui/icons-material/Sync';
 import { DataGrid } from "@mui/x-data-grid";
 import { tokens } from "../../theme";
 import Header from "../../components/Header";
 import { useState, useEffect } from "react";
 import { useResults } from "../landing/resultsContext.jsx";
-import { useNavigate } from 'react-router-dom'; // Import useHistory
+import { useNavigate } from 'react-router-dom';
 
 
 const Questions = () => {
@@ -14,10 +16,12 @@ const Questions = () => {
     const [rows, setRows] = useState([]);
     const [rowCount, setRowCount] = useState(0);
     const [loading, setLoading] = useState(false);
+    const [clickedIcons, setClickedIcons] = useState({});
     const [paginationModel, setPaginationModel] = useState({
         page: 1,
         pageSize: 100,
     });
+    const [selectedTitleId, setSelectedTitleId] = useState(localStorage.getItem('selectedTitleId') || null); // Initialize state from local storage
 
     const navigate = useNavigate(); // For navigation
     let filteredResults = [];
@@ -45,8 +49,52 @@ const Questions = () => {
         setLoading(false);
     }, [results])
 
+    useEffect(() => {
+        const fetchClickedIcons = async () => {
+            try {
+                const response = await fetch('http://127.0.0.1:8000/clicked-icons');
+                if (!response.ok) {
+                    throw new Error('API call failed');
+                }
+                const data = await response.json();
+                const clickedIconState = {};
+                data.clicked_icons.forEach(id => {
+                    clickedIconState[id] = true;
+                });
+                setClickedIcons(clickedIconState);
+            } catch (error) {
+                console.error('Error fetching clicked icons:', error);
+            }
+        };
+
+        fetchClickedIcons();
+    }, []);
 
 
+    const handleIconClick = async (questionId) => {
+        try {
+            const response = await fetch('http://127.0.0.1:8000/fetch', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    fetch_type: 'question_answer',
+                    ids: [questionId],
+                }),
+            });
+
+            if (!response.ok) {
+                throw new Error('API call failed');
+            }
+
+            const data = await response.json();
+            console.log('Fetch successful', data);
+            setClickedIcons(prev => ({ ...prev, [questionId]: true }));
+        } catch (error) {
+            console.error('Error fetching data:', error);
+        }
+    };
     // useEffect(() => {
     //     const fetchData = (p) => {
     //         setLoading(true);
@@ -86,9 +134,15 @@ const Questions = () => {
             width: 600,
             renderCell: (params) => (
                 <div
-                    style={{ cursor: 'pointer', textDecoration: 'underline' }}
+                    style={{
+                        cursor: 'pointer',
+                        textDecoration: 'underline',
+                        color: params.row.uid === selectedTitleId ? 'pink' : 'inherit' // Dynamic color based on selection
+                    }}
                     onClick={() => {
+                        setSelectedTitleId(params.row.uid); // Set selected title ID
                         let id = params.row.uid;
+                        localStorage.setItem('selectedTitleId', params.row.uid); // Save to local storage
                         localStorage.setItem("questionId", id); // Save questionId to local storage
                         navigate(`/answers`, { state: { questionId: id } }); // Navigate on click
                     }}
@@ -97,7 +151,20 @@ const Questions = () => {
                 </div>
             )
         },
-        { field: "frequency", headerName: "Frequency" }
+        { field: "frequency", headerName: "Frequency" },
+        {
+            field: "action",
+            headerName: "Answer",
+            width: 100,
+            renderCell: (params) => (
+                <IconButton
+                    onClick={() => handleIconClick(params.row.uid)}
+                    style={{ color: clickedIcons[params.row.uid] ? 'green' : 'inherit' }}
+                >
+                    <SyncIcon />
+                </IconButton>
+            )
+        }
     ];
 
 
