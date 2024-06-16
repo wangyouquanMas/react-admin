@@ -1,4 +1,4 @@
-import { Box, Button, Select, MenuItem, FormControl, InputLabel } from "@mui/material";
+import { Box, Button, Select, MenuItem, FormControl, InputLabel, CircularProgress } from "@mui/material";
 import { DataGrid, GridToolbar } from "@mui/x-data-grid";
 import { tokens } from "../../theme";
 import { mockDataContacts } from "../../data/mockData";
@@ -104,21 +104,43 @@ const Answers = () => {
         setAnalysisOption(event.target.value);
     };
 
-    const handleAnalysisClick = () => {
-        fetch('http://172.235.13.33:5002/emotion', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({ question_id: questionId, analysis_option: analysisOption }),
-        })
-            .then(response => response.json())
-            .then(data => {
-                console.log(data);
-            })
-            .catch((error) => {
-                console.error('Error:', error);
+    // const handleAnalysisClick = () => {
+    //     fetch('http://172.235.13.33:5002/emotion', {
+    //         method: 'POST',
+    //         headers: {
+    //             'Content-Type': 'application/json',
+    //         },
+    //         body: JSON.stringify({ question_id: questionId, analysis_option: analysisOption }),
+    //     })
+    //         .then(response => response.json())
+    //         .then(data => {
+    //             console.log(data);
+    //         })
+    //         .catch((error) => {
+    //             console.error('Error:', error);
+    //         });
+    // };
+
+    const handleAnalysisClick = async () => {
+        if (!analysisOption) {
+            alert('Please select an analysis option before proceeding.');
+            return;
+        }
+        setLoading(true);
+        console.log(analysisOption)
+        const apiUrl = analysisOption === 'painpoint' ? 'http://172.235.13.33:5002/emotion' : 'http://172.235.13.33:5002/category';
+        try {
+            const response = await fetch(apiUrl, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ question_id: questionId, analysis_option: analysisOption })
             });
+            const data = await response.json();
+            console.log(data);
+        } catch (error) {
+            console.error('Error during analysis:', error);
+        }
+        setLoading(false);
     };
 
 
@@ -135,17 +157,17 @@ const Answers = () => {
                         labelId="analysis-select-label"
                         value={analysisOption}
                         label="Analysis"
-                        onChange={handleAnalysisChange}
+                        onChange={e => setAnalysisOption(e.target.value)}
+                    // onChange={handleAnalysisChange}
                     >
                         <MenuItem value="painpoint">Painpoint</MenuItem>
                         <MenuItem value="category">Category</MenuItem>
                         <MenuItem value="addiction">Addiction</MenuItem>
                     </Select>
                 </FormControl>
-                <Button
-                    variant="contained"
-                    onClick={handleAnalysisClick}
-                >Analysis</Button>
+                <Button variant="contained" onClick={handleAnalysisClick}>
+                    {loading ? <CircularProgress size={24} /> : 'Analyze'}
+                </Button>
             </Box>
             <Box
                 mt={1}
