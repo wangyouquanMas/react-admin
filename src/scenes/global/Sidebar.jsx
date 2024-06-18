@@ -1,7 +1,7 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { ProSidebar, Menu, MenuItem } from "react-pro-sidebar";
 import { Box, IconButton, Typography, useTheme } from "@mui/material";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import "react-pro-sidebar/dist/css/styles.css";
 import { tokens } from "../../theme";
 import HomeOutlinedIcon from "@mui/icons-material/HomeOutlined";
@@ -20,6 +20,9 @@ import MapOutlinedIcon from "@mui/icons-material/MapOutlined";
 const Item = ({ title, to, icon, selected, setSelected }) => {
     const theme = useTheme();
     const colors = tokens(theme.palette.mode);
+
+    console.log("selected,title:", selected, title)
+
     return (
         <MenuItem
             active={selected === title}
@@ -35,11 +38,49 @@ const Item = ({ title, to, icon, selected, setSelected }) => {
     );
 };
 
+
 const Sidebar = () => {
     const theme = useTheme();
     const colors = tokens(theme.palette.mode);
     const [isCollapsed, setIsCollapsed] = useState(false);
-    const [selected, setSelected] = useState("Dashboard");
+    const location = useLocation();
+
+    const getSelectedItem = (pathname) => {
+        switch (pathname) {
+            case '/dashboard':
+                return 'Dashboard';
+            case '/questions':
+                return 'Manage Questions';
+            case '/answers':
+                return 'Answers Information';
+            case '/products':
+                return 'Products';
+            case '/swot':
+                return 'SWOT';
+            case '/psychology':
+                return 'Psychology';
+            case '/faq':
+                return 'FAQ Page';
+            case '/trigger':
+                return 'Triggers';
+            case '/emotion':
+                return 'Emotion Chart';
+            case '/psychology_analysis':
+                return 'Psychology analysis';
+            case '/painpoint':
+                return 'Painpoint';
+            default:
+                return 'Dashboard';
+        }
+    };
+
+    const [selected, setSelected] = useState(getSelectedItem(location.pathname));
+    useEffect(() => {
+        setSelected(getSelectedItem(location.pathname));
+    }, [location]);
+
+
+
 
     return (
         <Box

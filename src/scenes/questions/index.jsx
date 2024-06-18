@@ -144,6 +144,7 @@ const Questions = () => {
                         let id = params.row.uid;
                         localStorage.setItem('selectedTitleId', params.row.uid); // Save to local storage
                         localStorage.setItem("questionId", id); // Save questionId to local storage
+                        localStorage.setItem('selectedSidebarItem', 'Answers Information'); // Save selected sidebar item to local storage
                         navigate(`/answers`, { state: { questionId: id } }); // Navigate on click
                     }}
                 >
