@@ -11,6 +11,21 @@ export const fetchSearchResults = async (query) => {
     }))
 }
 
+
+export const fetchSemanticSearch = async (query) => {
+    const url = new URL("http://127.0.0.1:8080/search")
+    url.searchParams.append('query', query)
+    const response = await fetch(url)
+    const data = await response.json()
+    console.log("data:", data)
+    return data.map((content) => ({
+        uid: content.source.uid,
+        title: content.source.title,
+        frequency: content.source.frequency
+    }))
+}
+
+
 export const fetchProducts = async (query) => {
     const url = new URL("http://127.0.0.1:8080/products")
     url.searchParams.append('query', query)

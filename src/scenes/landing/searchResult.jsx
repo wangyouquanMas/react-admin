@@ -26,7 +26,7 @@ function SearchResultsList({ results, products }) {
                     );
                 })}
             </div>
-            <div className="divider"></div>
+            {/* <div className="divider"></div>
             <div className="products-column">
                 <Typography variant="h5" className="column-title">SWOT</Typography>
                 {
@@ -38,7 +38,7 @@ function SearchResultsList({ results, products }) {
                         )
                     })
                 }
-            </div>
+            </div> */}
         </Box>
     );
 }
