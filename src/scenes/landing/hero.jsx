@@ -1,21 +1,8 @@
-import React, { useEffect, useRef } from 'react';
-import { Typed } from 'react-typed';
+import React from 'react';
+import useTypewriter from './useTypewriter'; // Adjust the import path as necessary
 
 const Hero = () => {
-    const elRef = useRef(null); // Create a ref for the DOM element
-
-    useEffect(() => {
-        if (elRef.current) {
-            const typed = new Typed(elRef.current, {
-                strings: ['PM', 'Developer', 'Anyone'],
-                typeSpeed: 120,
-                backSpeed: 140,
-                loop: true
-            });
-
-            return () => typed.destroy(); // Cleanup Typed instance on component unmount
-        }
-    }, []); // Empty dependency array to ensure this runs only once
+    const typedText = useTypewriter(['PM', 'Developer', 'Anyone'], 120, 140, 1000);
 
     return (
         <div className='text-white'>
@@ -30,8 +17,9 @@ const Hero = () => {
                     <p className='md:text-5xl w-full sm:text-4xl text-xl font-bold py-4'>
                         Fast, flexible Analysis for
                     </p>
-                    {/* Ensure the span element is correctly referenced */}
-                    <span ref={elRef} className='md:text-5xl sm:text-4xl text-xl font-bold md:pl-4 pl-2'></span>
+                    <span className='md:text-5xl sm:text-4xl text-xl font-bold md:pl-4 pl-2'>
+                        {typedText}
+                    </span>
                 </div>
                 <p className='md:text-2xl text-xl font-bold text-gray-500'>Knowing what to do matters than how to do it.</p>
                 {/* <button className='bg-[#00df9a] w-[200px] rounded-md font-medium my-6 mx-auto py-3 text-black'>Input your Idea</button> */}

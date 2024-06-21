@@ -57,8 +57,8 @@ const BarChart = ({ isDashboard = false, searchId }) => {
           percentage: cat.category_percentage,
           color: `hsl(${Math.random() * 360}, 70%, 50%)`, // Consider a fixed color or a color scale
         })) : subCategories.map(subCat => ({
-          category: subCat.sub_category,
-          percentage: subCat.sub_category_percentage,
+          category: subCat.category,
+          percentage: subCat.category_percentage,
           color: `hsl(${Math.random() * 360}, 70%, 50%)`, // Consider a fixed color or a color scale
         }));
 
@@ -80,7 +80,7 @@ const BarChart = ({ isDashboard = false, searchId }) => {
         data={data}
         keys={["percentage"]}
         indexBy="category"
-        margin={{ top: 50, right: 130, bottom: 50, left: 60 }}
+        margin={{ top: 50, right: 130, bottom: 380, left: 90 }}
         padding={0.3}
         valueScale={{ type: "linear" }}
         indexScale={{ type: "band", round: true }}
@@ -91,7 +91,7 @@ const BarChart = ({ isDashboard = false, searchId }) => {
         axisBottom={{
           tickSize: 5,
           tickPadding: 5,
-          tickRotation: 0,
+          tickRotation: -60,
           legend: isDashboard ? undefined : "Category",
           legendPosition: "middle",
           legendOffset: 32,

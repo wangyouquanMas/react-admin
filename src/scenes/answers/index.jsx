@@ -128,15 +128,18 @@ const Answers = () => {
         }
         setLoading(true);
         console.log(analysisOption)
-        const apiUrl = analysisOption === 'painpoint' ? 'http://172.235.13.33:5002/emotion' : 'http://172.235.13.33:5002/category';
+        const apiUrl = analysisOption === 'painpoint' ? 'http://172.235.13.33:5002/emotion'
+            : analysisOption === 'category' ? 'http://172.235.13.33:5002/category'
+                : 'http://127.0.0.1:8002/wordcloud';
         try {
+            console.log(`Sending request with question_id: ${questionId} and analysis_option: ${analysisOption}`);
             const response = await fetch(apiUrl, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ question_id: questionId, analysis_option: analysisOption })
             });
             const data = await response.json();
-            console.log(data);
+            console.log('Response data:', data);
         } catch (error) {
             console.error('Error during analysis:', error);
         }
@@ -163,6 +166,7 @@ const Answers = () => {
                         <MenuItem value="painpoint">Painpoint</MenuItem>
                         <MenuItem value="category">Category</MenuItem>
                         <MenuItem value="addiction">Addiction</MenuItem>
+                        <MenuItem value="wordcloud">WordCloud</MenuItem>
                     </Select>
                 </FormControl>
                 <Button variant="contained" onClick={handleAnalysisClick}>

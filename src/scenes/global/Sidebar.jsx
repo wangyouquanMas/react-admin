@@ -16,6 +16,8 @@ import PieChartOutlineOutlinedIcon from "@mui/icons-material/PieChartOutlineOutl
 import TimelineOutlinedIcon from "@mui/icons-material/TimelineOutlined";
 import MenuOutlinedIcon from "@mui/icons-material/MenuOutlined";
 import MapOutlinedIcon from "@mui/icons-material/MapOutlined";
+import CloudOutlinedIcon from "@mui/icons-material/CloudOutlined";
+
 
 const Item = ({ title, to, icon, selected, setSelected }) => {
     const theme = useTheme();
@@ -69,6 +71,8 @@ const Sidebar = () => {
                 return 'Psychology analysis';
             case '/painpoint':
                 return 'Painpoint';
+            case '/wordcloud':
+                return 'Wordcloud';
             default:
                 return 'Dashboard';
         }
@@ -256,6 +260,13 @@ const Sidebar = () => {
                             title="Painpoint"
                             to="/painpoint"
                             icon={<MapOutlinedIcon />}
+                            selected={selected}
+                            setSelected={setSelected}
+                        />
+                        <Item
+                            title="Wordcloud"
+                            to="/wordcloud"
+                            icon={<CloudOutlinedIcon />}
                             selected={selected}
                             setSelected={setSelected}
                         />
