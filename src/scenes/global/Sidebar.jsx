@@ -17,6 +17,7 @@ import TimelineOutlinedIcon from "@mui/icons-material/TimelineOutlined";
 import MenuOutlinedIcon from "@mui/icons-material/MenuOutlined";
 import MapOutlinedIcon from "@mui/icons-material/MapOutlined";
 import CloudOutlinedIcon from "@mui/icons-material/CloudOutlined";
+import AddLocationAltOutlinedIcon from "@mui/icons-material/AddLocationAltOutlined"; // Import an icon for Environment
 
 
 const Item = ({ title, to, icon, selected, setSelected }) => {
@@ -73,6 +74,8 @@ const Sidebar = () => {
                 return 'Painpoint';
             case '/wordcloud':
                 return 'Wordcloud';
+            case '/environment': // Add this line
+                return 'Environment'; // Add this lin
             default:
                 return 'Dashboard';
         }
@@ -267,6 +270,13 @@ const Sidebar = () => {
                             title="Wordcloud"
                             to="/wordcloud"
                             icon={<CloudOutlinedIcon />}
+                            selected={selected}
+                            setSelected={setSelected}
+                        />
+                        <Item
+                            title="Environment" // Add this item
+                            to="/context" // Add this item
+                            icon={<AddLocationAltOutlinedIcon />} // Add this item
                             selected={selected}
                             setSelected={setSelected}
                         />

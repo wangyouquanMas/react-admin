@@ -18,6 +18,7 @@ import Painpoints from './scenes/painpoint/index.jsx';
 import Psychologys from './scenes/psychology/index.jsx';
 import PsychologyAnalysis from './scenes/psychology_analysis/index.jsx';
 import WorldCloud from './scenes/word_cloud/index.jsx';
+import Context from './scenes/context/index.jsx';
 import { useState } from "react";
 
 
@@ -55,6 +56,7 @@ function App() {
                 <Route path="/psychology" element={<Psychologys />} />
                 <Route path="/psychology_analysis" element={<PsychologyAnalysis />} />
                 <Route path="/wordcloud" element={<WorldCloud />} />
+                <Route path="/context" element={<Context />} />
               </Routes>
             </main>
           </div>
