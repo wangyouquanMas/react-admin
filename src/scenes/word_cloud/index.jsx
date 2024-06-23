@@ -26,19 +26,21 @@ const WorldCloud = () => {
             localStorage.setItem("questionId", location.state.questionId); // Save to local storage
         } else {
             const storedQuestionId = localStorage.getItem("questionId");
+            console.log("****************", storedQuestionId)
             if (storedQuestionId) {
                 setsearchID(storedQuestionId);
             }
         }
-        console.log("questionId log:", questionId);
     }, [location.state]);
 
 
     useEffect(() => {
         if (!searchID) return;  // Prevent fetching if `questionId` is undefined or empty
+        console.log("*********111111111*******")
 
         const cachedImageUrl = localStorage.getItem(`wordcloud_${searchID}`);
         if (cachedImageUrl) {
+            console.log("*********22*******")
             setImageUrl(cachedImageUrl);
             return;
         }
@@ -46,7 +48,7 @@ const WorldCloud = () => {
         const fetchWordCloud = async () => {
             setLoading(true);
             try {
-                console.log("searchID", searchID)
+                console.log("*********111111111*******")
                 const response = await fetch('http://127.0.0.1:8002/wordcloud', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
@@ -70,9 +72,6 @@ const WorldCloud = () => {
         fetchWordCloud();
     }, [searchID]);
 
-    // useEffect(() => {
-    //     fetchWordCloud();
-    // }, []);
 
     const handleSearchInputChange = (event) => {
         setTempQuery(event.target.value);

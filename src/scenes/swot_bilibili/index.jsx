@@ -8,7 +8,7 @@ import { useState, useEffect } from "react";
 import { useLocation } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
 
-const Answers = () => {
+const SWOT_bilibili = () => {
     const location = useLocation();
     const theme = useTheme();
     const colors = tokens(theme.palette.mode);
@@ -244,4 +244,4 @@ const Answers = () => {
     );
 };
 
-export default Answers;
+export default SWOT_bilibili;

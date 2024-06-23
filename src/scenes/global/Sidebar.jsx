@@ -60,6 +60,8 @@ const Sidebar = () => {
                 return 'Products';
             case '/swot':
                 return 'SWOT';
+            case '/swot_bilibili':
+                return 'SWOT_bilibili';
             case '/psychology':
                 return 'Psychology';
             case '/faq':
@@ -217,6 +219,13 @@ const Sidebar = () => {
                             setSelected={setSelected}
                         />
                         <Item
+                            title="SWOT Bilibili"
+                            to="/swot_bilibili"
+                            icon={<PersonOutlinedIcon />}
+                            selected={selected}
+                            setSelected={setSelected}
+                        />
+                        <Item
                             title="Psychology"
                             to="/psychology"
                             icon={<CalendarTodayOutlinedIcon />}
@@ -274,7 +283,7 @@ const Sidebar = () => {
                             setSelected={setSelected}
                         />
                         <Item
-                            title="Environment" // Add this item
+                            title="Context" // Add this item
                             to="/context" // Add this item
                             icon={<AddLocationAltOutlinedIcon />} // Add this item
                             selected={selected}
